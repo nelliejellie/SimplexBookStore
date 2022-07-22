@@ -118,6 +118,7 @@
         for (var i = 0; i < btns.length; i++) {
             id = btns[i].dataset.id;
             btns[i].onclick = function (e) {
+                $(".hidden-id").val(id)
                 console.log(id)
                 $('#MyDeleteModal').modal('show');
             }
@@ -157,8 +158,7 @@
             $(".text-delete").text("Deleting...");
             var url = "@Url.Action("Delete", "Home")/" + id
             console.log(url)
-            $.post(url).then(function () { location.reload() });
-            ;
+            $.post(url);
         }
         
 

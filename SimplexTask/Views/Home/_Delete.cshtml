@@ -9,8 +9,8 @@
                 </div>
                 <div class="flex w-full justify-between">
                     <form method="post" asp-controller="Home" asp-action="Delete" class="flex w-full justify-between">
-                        @Html.Hidden("id", "", new { @class = "hiddenid" })
-                        <button type="button" asp-controller="Home" asp-action="Delete" onclick="confirmDelete()" class="btn btn-success delete-yes">Yes</button>
+                        <input name="Id" class="hidden-id" value="" type="hidden"/>
+                        <button type="submit" asp-controller="Home" asp-action="Delete" class="btn btn-success delete-yes">Yes</button>
                         <button type="button" id="closeDeleteModal" class="btn btn-danger">No</button>
                     </form>
                 </div>
