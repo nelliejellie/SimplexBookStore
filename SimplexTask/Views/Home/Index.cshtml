@@ -1,0 +1,170 @@
+﻿@model Book
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<partial name="_Notification" />
+<section class="container">
+    <div class="row pt-4">
+        <div class="flex justify-between items-center">
+            @if (!this.User.IsInRole("Admin"))
+            {
+                <a class="btn btn-primary text-white h-[40%]" id="buttonCreate">
+                    Create New Book
+                </a>
+            }
+            @if (this.User.IsInRole("Admin"))
+            {
+                <form method="post" asp-action="Index" class="flex flex-col w-80">
+                    <label for="CreatedOn" class="form-label mt-4 bg-[#002B36]">Filter By Date</label>
+                    <input onchange="this.form.submit()" name="CreatedOn" type="date" />
+                </form>
+            }
+            else
+            {
+                <form method="post" asp-action="Index" class="flex flex-col w-96">
+                    <label for="exampleSelect1" class="form-label mt-4 bg-[#002B36]">Filter By Rating</label>
+                    <select onchange="this.form.submit()" asp-for="Rating" name="Rating" class="form-select" id="exampleSelect1">
+                        <option value="all">All</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </form>
+            }
+
+        </div>
+    </div>
+    <table class="table table-bordered table-striped mt-4">
+        <thead>
+            <tr>
+                <th>
+                    Book Name
+                </th>
+                <th>
+                    Ratings
+                </th>
+                <th>
+                    Author
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in ViewBag.Books)
+            {
+                <tr>
+                    <td>
+                        @obj.Name
+                    </td>
+                    <td>
+                        @obj.Rating/5
+                    </td>
+                    <td>
+                        @obj.Author
+                    </td>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <button type="button" class="btn btn-info">@obj.CreatedOn</button>
+                        </td>
+                    }
+                    else
+                    { 
+                        <td>
+                            <button type="button" class="btn btn-danger buttonDelete" id="buttonDelete" data-id="@obj.Id">Delete</button>
+                        </td>
+                    
+                    }
+                    
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <button type="button" class="btn btn-info">@obj.UserName</button>
+                        </td>
+                    }
+                    else 
+                    { 
+                        <td>
+                            <button type="button" class="btn btn-info buttonUpdate" data-id="@obj.Id" data-Name="@obj.Name" data-Author="@obj.Author" data-Rating="@obj.Rating">Change Rating</button>
+                        </td>                   
+                    }
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*for creating a book*@
+    <partial name="_Create" />
+    @*for deleting a book*@
+    <partial name="_Delete" />
+    @*for deleting a book*@
+    <partial name="_Update" />
+</section>
+
+@section Scripts{
+    <script type="text/javascript">
+        // for opening create modal
+        $("#buttonCreate").click(function (e) {
+            $('#MyPopUp').modal('show');
+        })
+
+        // for opening the delete modal
+        var btns = $(".buttonDelete");
+        console.log(btns)
+        var id = "";
+        for (var i = 0; i < btns.length; i++) {
+            id = btns[i].dataset.id;
+            btns[i].onclick = function (e) {
+                console.log(id)
+                $('#MyDeleteModal').modal('show');
+            }
+
+        }
+
+        // handling update
+        var btnUpdates = $(".buttonUpdate");
+        var idForUpdate = "";
+        var Name = "";
+        var Author = "";
+        var Rating = "";
+        for (var i = 0; i < btnUpdates.length; i++) {
+            idForUpdate = btnUpdates[i].dataset.id;
+            Name = btnUpdates[i].dataset.name;
+            Author = btnUpdates[i].dataset.author;
+            Rating = btnUpdates[i].dataset.rating;
+            console.log(btnUpdates[i])
+            btnUpdates[i].onclick = function (e) {
+                console.log(`${id} ${Name} ${Author}`)
+                $(".IdUpdate").val(idForUpdate);
+                $(".NameUpdate").val(Name);
+                $(".AuthorUpdate").val(Author);
+                $(".RatingUpdate").val(Rating);
+                $('#MyUpdateModal').modal('show');
+            }
+
+        }
+        
+        
+
+        // sending delete request
+        var confirmDeleteButton = $(".delete-yes");
+        
+        function confirmDelete() {
+            // change the input modal text value to deleting
+            $(".text-delete").text("Deleting...");
+            var url = "@Url.Action("Delete", "Home")/" + id
+            console.log(url)
+            $.post(url).then(function () { location.reload() });
+            ;
+        }
+        
+
+        // close delete modal
+        $("#closeDeleteModal").click(function (e) {
+            $('#MyDeleteModal').modal('hide');
+        })
+    </script>
+}

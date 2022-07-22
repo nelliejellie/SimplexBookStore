@@ -1,0 +1,37 @@
+﻿@model Book
+<div class="modal fade" id="MyUpdateModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h1 class="title-h">Create Book</h1>
+                <div>
+                    <form method="post" asp-action="Update">
+                        <input name="Id" class="IdUpdate" asp-for="Id" hidden />
+                        <div class="form-group">
+                            <label asp-for="Name" class="form-label mt-4" for="inputValid">Name</label>
+                            <input asp-for="Name" type="text" class="form-control NameUpdate" id="inputValid" disabled>
+                            <span asp-validation-for="Name"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Rating" for="exampleSelect1" class="form-label mt-4">Example select</label>
+                            <select asp-for="Rating" name="Rating" class="form-select RatingUpdate" id="exampleSelect1">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Author" class="form-label mt-4" for="inputValid">Author</label>
+                            <input asp-for="Author" type="text" class="form-control AuthorUpdate" id="inputValid" disabled>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-lg btn-success" type="submit">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
