@@ -105,6 +105,7 @@ namespace SimplexTask.Controllers
                 TempData["success"] = "Login Successful";
                 return RedirectToAction("Index", "Home");
             }
+            ModelState.AddModelError("password", "The username or password is incorrect");
             return View(loginModel);
         }
     }

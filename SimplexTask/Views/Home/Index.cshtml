@@ -5,9 +5,9 @@
 }
 
 <partial name="_Notification" />
-<section class="container">
+<section class="container mb-16">
     <div class="row pt-4">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center create-book-small">
             @if (!this.User.IsInRole("Admin"))
             {
                 <a class="btn btn-primary text-white h-[40%]" id="buttonCreate">
@@ -16,14 +16,14 @@
             }
             @if (this.User.IsInRole("Admin"))
             {
-                <form method="post" asp-action="Index" class="flex flex-col w-80">
+                <form method="post" asp-action="Index" class="flex flex-col w-80 filter">
                     <label for="CreatedOn" class="form-label mt-4 bg-[#002B36]">Filter By Date</label>
                     <input onchange="this.form.submit()" name="CreatedOn" type="date" />
                 </form>
             }
             else
             {
-                <form method="post" asp-action="Index" class="flex flex-col w-96">
+                <form method="post" asp-action="Index" class="flex flex-col w-96 filter">
                     <label for="exampleSelect1" class="form-label mt-4 bg-[#002B36]">Filter By Rating</label>
                     <select onchange="this.form.submit()" asp-for="Rating" name="Rating" class="form-select" id="exampleSelect1">
                         <option value="all">All</option>
@@ -38,7 +38,7 @@
 
         </div>
     </div>
-    <table class="table table-bordered table-striped mt-4">
+    <table class="table table-bordered table-striped mt-4 myTable">
         <thead>
             <tr>
                 <th>
@@ -59,9 +59,14 @@
                     <td>
                         @obj.Name
                     </td>
-                    <td>
-                        @obj.Rating/5
+
+                    <td class="flex justify-start space-x-1">
+                        @for (var star = 0; star < Int16.Parse(@obj.Rating); star++)
+                        {
+                            <img src="~/img/star.jpg" class="starImage" />
+                        }
                     </td>
+
                     <td>
                         @obj.Author
                     </td>
@@ -72,30 +77,54 @@
                         </td>
                     }
                     else
-                    { 
+                    {
                         <td>
                             <button type="button" class="btn btn-danger buttonDelete" id="buttonDelete" data-id="@obj.Id">Delete</button>
                         </td>
-                    
+
                     }
-                    
+
                     @if (this.User.IsInRole("Admin"))
                     {
                         <td>
                             <button type="button" class="btn btn-info">@obj.UserName</button>
                         </td>
                     }
-                    else 
-                    { 
+                    else
+                    {
                         <td>
                             <button type="button" class="btn btn-info buttonUpdate" data-id="@obj.Id" data-Name="@obj.Name" data-Author="@obj.Author" data-Rating="@obj.Rating">Change Rating</button>
-                        </td>                   
+                        </td>
+
                     }
-                    
+
                 </tr>
             }
         </tbody>
     </table>
+    @*for mobile phones*@
+    @foreach (var obj in ViewBag.Books)
+    {
+        <div class="card text-white bg-secondary mb-3 mt-4 card-for-mobile" style="max-width: 20rem;">
+            <div class="card-header">Name: @obj.Name</div>
+            <div class="card-body">
+                <h4 class="card-title flex space-x-1">Rating:
+                    @for (var star = 0; star < Int16.Parse(@obj.Rating); star++)
+                    {
+                        <img src="~/img/star.jpg" class="starImage" />
+                    }
+                </h4>
+                <p class="card-text">Author: @obj.Author</p>
+            </div>
+            <div class="flex justify-between card-body">
+                <button type="button" class="btn btn-success buttonUpdate" data-id="@obj.Id" data-Name="@obj.Name" data-Author="@obj.Author" data-Rating="@obj.Rating">Change Rating</button>
+                <button type="button" class="btn btn-danger buttonDelete" id="buttonDelete" data-id="@obj.Id">Delete Book</button>
+            </div>
+        </div>
+    }
+
+
+
     @*for creating a book*@
     <partial name="_Create" />
     @*for deleting a book*@
@@ -147,20 +176,6 @@
             }
 
         }
-        
-        
-
-        // sending delete request
-        var confirmDeleteButton = $(".delete-yes");
-        
-        function confirmDelete() {
-            // change the input modal text value to deleting
-            $(".text-delete").text("Deleting...");
-            var url = "@Url.Action("Delete", "Home")/" + id
-            console.log(url)
-            $.post(url);
-        }
-        
 
         // close delete modal
         $("#closeDeleteModal").click(function (e) {

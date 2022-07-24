@@ -10,8 +10,8 @@ using SimplexTask.DataAccess;
 namespace SimplexTask.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220721154925_user Id")]
-    partial class userId
+    [Migration("20220724123717_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -240,8 +240,12 @@ namespace SimplexTask.Migrations
                     b.Property<string>("Rating")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

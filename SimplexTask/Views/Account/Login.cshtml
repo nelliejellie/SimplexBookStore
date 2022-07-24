@@ -2,22 +2,22 @@
 
 
 <h1 class="text-2xl font-bold text-center mt-8">Login</h1>
-<div class="ml-8  w-full">
+<div class="ml-8 mb-16">
     <form class="" method="post" asp-action="Login">
-        <div class="form-group w-2/5">
+        <div class="form-group w-2/5 form-small">
             <label asp-for="Email" for="exampleInputEmail1" class="form-label mt-4">Email address</label>
             <input asp-for="Email" type="text" class="form-control h-14" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             <span asp-validation-for="Email"></span>
         </div>
-        <div class="form-group w-2/5">
+        <div class="form-group w-2/5 form-small">
             <label asp-for="Password" for="exampleInputPassword1" class="form-label mt-4">Password</label>
             <input asp-for="Password" type="password" class="form-control h-14" id="exampleInputPassword1" placeholder="Password">
             <span asp-validation-for="Password"></span>
         </div>
-        <div class="d-grid gap-2 w-2/5 mt-16">
+        <div class="d-grid gap-2 w-2/5 mt-16 form-small">
             <button class="btn btn-lg btn-primary" type="submit">Login</button>
         </div>
     </form>
-    <a asp-controller="Account" asp-action="Register" class="btn btn-secondary w-2/5 mt-16">Don't Have an account yet? Register</a>
+    <a asp-controller="Account" asp-action="Register" class="btn btn-secondary w-2/5 mt-16 form-small">Don't Have an account yet? Register</a>
 </div>
